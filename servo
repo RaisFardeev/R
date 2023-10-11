@@ -1,0 +1,42 @@
+#include <Servo.h>
+Servo servo1; // Создаем объект Servo для первого сервопривода
+Servo servo2; // Создаем объект Servo для второго сервопривода
+Servo servo3;
+
+void setup() {
+  Serial.begin(9600); // Инициализируем последовательный порт
+
+  servo1.attach(4);  // Подключаем первый сервопривод к пину 4
+  servo2.attach(7); // Подключаем второй сервопривод к пину 7
+  servo3.attach(8);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    // Если есть доступные данные через последовательный порт
+
+    // Считываем команду
+    String command = Serial.readStringUntil('\n');
+
+    if (command.startsWith("s1")) {
+      int angle1 = command.substring(3,6).toInt();
+      Serial.println(angle);
+      servo1.write(angle);
+      delay(1000); 
+    } else if (command.startsWith("-")) {
+      int angle1 = command.substring(0,3).toInt();
+      int angle2 = command.substring(4,7).toInt();
+      Serial.println(angle1, angle2);
+      servo2.write(angle1);
+      servo3.write(angle2);
+      delay(1000); 
+    } else {
+      int angle1 = command.substring(0,2).toInt();
+      int angle2 = command.substring(3,6).toInt();
+      Serial.println(angle1, angle2);
+      servo2.write(angle1);
+      servo3.write(angle2);
+      delay(1000); 
+    }
+  }
+}
